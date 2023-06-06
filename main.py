@@ -613,7 +613,7 @@ def get_lamp_row(input_row, commercial_type):
     row.append(get_title(input_row))
     row.append("")
     row.append(get_count_in_pack(input_row))
-    row.append(get_lamp_row(input_row, commercial_type))  # тип цоколя
+    row.append(get_cokol_lamp(input_row))  # тип цоколя
     row.append("")  # мощность, ВТ
     row.append(get_type(commercial_type))
     row.extend(['', '', ''])
