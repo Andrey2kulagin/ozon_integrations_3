@@ -46,7 +46,7 @@ def get_weight(input_row):
 def get_basic_row(row, input_row, commercial_type):
     row.append("")
     row.append(input_row[0])  # артикул
-    row.append(input_row[8])  # название товара
+    row.append(get_title(input_row))  # название товара
     row.append(input_row[5])
     row.append(input_row[6])
     row.append("Не облагается")
@@ -819,7 +819,7 @@ def main():
                                       open("categories_files/children_creativity_categories.txt", 'r',
                                            encoding='utf-8').readlines()]
     set_for_creativity_categories = [i.strip() for i in
-                                     open("categories_files/children_creativity_categories.txt", 'r',
+                                     open("categories_files/set_for_creativity_categories.txt", 'r',
                                           encoding='utf-8').readlines()]
     office_equipment_categories = [i.strip() for i in
                                    open("categories_files/office_equipment_categories.txt", 'r',
@@ -933,7 +933,7 @@ def main():
                 write_row("output/lamp_output.xlsx", row)
             elif ozon_category == "Светильник настольный":
                 counter += 1
-                row = get_lamp_row(input_row, ozon_category)
+                row = get_big_lamp_row(input_row, ozon_category)
                 write_row("output/big_lamp_output.xlsx", row)
             elif ozon_category in fire_fighting_categories:
                 counter += 1
@@ -961,6 +961,9 @@ def main():
                 f.close()
             print(counter)
         except Exception as e:
+            f1 = open("error_ids.txt", 'a', encoding='utf-8')
+            f1.write(input_row[0] + '\n')
+            f1.close()
             f = open("errors.txt", 'a', encoding='utf-8')
             f.write('\n\nstart_bag\n' + 'id:' + input_row[0] + '\n')
             f.write(e.__str__() + '\nendbag\n\n')
@@ -971,7 +974,7 @@ def output_files_create():
     output_filenames = ['chancellery_output.xlsx', 'paper_products_output.xlsx', 'medical_devices_output.xlsx',
                         'medical_supplies_output.xlsx', 'cleaning_products_output.xlsx', 'air_freshener_output.xlsx',
                         'bags_output.xlsx', 'food_accessories_output.xlsx', 'inventory_for_home_output.xlsx',
-                        'inventory_for_cleaning_output.xlsx'
+                        'inventory_for_cleaning_output.xlsx',
                         'disposable_tableware_output.xlsx', 'dishes_output.xlsx', 'things_storage_output.xlsx',
                         'paper_output.xlsx', 'demonstration_boards_output.xlsx', 'child_bags_output.xlsx',
                         'glue_output.xlsx', 'folders_files_output.xlsx', 'pencil_box_output.xlsx',
@@ -990,4 +993,4 @@ def output_files_create():
 
 if __name__ == "__main__":
     main()
-    # output_files_create()
+    #output_files_create()
