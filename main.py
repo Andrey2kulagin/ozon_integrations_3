@@ -749,6 +749,31 @@ def write_row(filename, row):
     wb.save(filename)
 
 
+def write_array(filename, array):
+    wb = openpyxl.load_workbook(filename)
+    ws = wb.active
+    for row in array:
+        ws.append(row)
+    wb.save(filename)
+
+
+def in_pack_handler(input_row):
+    input_row = list(input_row)
+    count_in_pack_str = input_row[12]
+    price_min = input_row[5]
+    if price_min:
+        price_min = str(round(float(price_min) * float(count_in_pack_str)))
+        input_row[5] = price_min
+    price_max = input_row[6]
+    if price_min:
+        price_max = str(round(float(price_max) * float(count_in_pack_str)))
+        input_row[6] = price_max
+    description = input_row[9]
+    input_row[
+        9] = f"ПРОДАЕТСЯ ТОЛЬКО УПАКОВКАМИ. В УПАКОВКЕ {count_in_pack_str} ШТУК. ЦЕНА УКАЗАНА ЗА УПАКОВКУ" + description
+    return tuple(input_row)
+
+
 def main():
     wb = openpyxl.load_workbook("input.xlsx")
     counter = 0
@@ -824,137 +849,174 @@ def main():
     office_equipment_categories = [i.strip() for i in
                                    open("categories_files/office_equipment_categories.txt", 'r',
                                         encoding='utf-8').readlines()]
+
+    chancellery_categories_arr = []
+    food_accessories_arr = []
+    paper_arr = []
+    paper_products_arr = []
+    medical_devices_arr = []
+    inventory_for_home_arr = []
+    inventory_for_cleaning_arr = []
+    medical_supplies_arr = []
+    cleaning_products_arr = []
+    air_freshener_arr = []
+    bags_arr = []
+    disposable_tableware_arr = []
+    dishes_arr = []
+    things_storage_arr = []
+    demonstration_boards_arr = []
+    child_bags_arr = []
+    glue_arr = []
+    folders_files_arr = []
+    pencil_box_arr = []
+    seal_and_stamp_arr = []
+    writing_materials_arr = []
+    personal_hygiene_arr = []
+    clothes_arr = []
+    juse_drinks_arr = []
+    bread_arr = []
+    lamp_arr = []
+    fire_fighting_arr = []
+    children_creativity_arr = []
+    set_for_creativity_arr = []
+    computer_bag_arr = []
+    big_lamp_arr = []
     for input_row in sheet.iter_rows(values_only=True):
         try:
+            if not input_row[0]:
+                break
             ozon_category = get_ozon_category(input_row[7])
+            if input_row[12]:
+                input_row = in_pack_handler(input_row)
             if ozon_category in chancellery_categories:
                 counter += 1
                 row = get_stationery_row(input_row, ozon_category)
-                write_row("output/chancellery_output.xlsx", row)
+                chancellery_categories_arr.append(row)
             elif ozon_category in paper_products_categories:
                 counter += 1
                 row = get_paper_products_row(input_row, ozon_category)
-                write_row("output/paper_products_output.xlsx", row)
+                paper_products_arr.append(row)
             elif ozon_category in medical_devices_categories:
                 counter += 1
                 row = get_medical_devices_row(input_row, ozon_category)
-                write_row("output/medical_devices_output.xlsx", row)
+                medical_devices_arr.append(row)
             elif ozon_category in medical_supplies_categories:
                 counter += 1
                 row = get_medical_supplies_row(input_row, ozon_category)
-                write_row("output/medical_supplies_output.xlsx", row)
+                medical_supplies_arr.append(row)
             elif ozon_category in cleaning_products_categories:
                 counter += 1
                 row = get_cleaning_products_row(input_row, ozon_category)
-                write_row("output/cleaning_products_output.xlsx", row)
+                cleaning_products_arr.append(row)
             elif ozon_category in air_freshener_categories:
                 counter += 1
                 row = get_air_freshener_row(input_row, ozon_category)
-                write_row("output/air_freshener_output.xlsx", row)
+                air_freshener_arr.append(row)
             elif ozon_category == "Женская Сумка-шоппер":
                 counter += 1
                 row = get_bags_row(input_row, ozon_category)
-                write_row("output/bags_output.xlsx", row)
+                bags_arr.append(row)
             elif ozon_category == "Фольга, пленка, бумага для выпечки, пакеты для запекания":
                 counter += 1
                 row = get_food_accessories_row(input_row, ozon_category)
-                write_row("output/food_accessories_output.xlsx", row)
+                food_accessories_arr.append(row)
             elif ozon_category in inventory_for_home_categories:
                 counter += 1
                 row = get_inventory_for_home_row(input_row, ozon_category)
-                write_row("output/inventory_for_home_output.xlsx", row)
+                inventory_for_home_arr.append(row)
             elif ozon_category in inventory_for_cleaning_categories:
                 counter += 1
                 row = get_inventory_for_cleaning_row(input_row, ozon_category)
-                write_row("output/inventory_for_cleaning_output.xlsx", row)
+                inventory_for_cleaning_arr.append(row)
             elif ozon_category == "Посуда одноразовая":
                 counter += 1
                 row = get_disposable_tableware_row(input_row, ozon_category)
-                write_row("output/disposable_tableware_output.xlsx", row)
+                disposable_tableware_arr.append(row)
             elif ozon_category in dishes_categories:
                 counter += 1
                 row = get_dishes_row(input_row, ozon_category)
-                write_row("output/dishes_output.xlsx", row)
+                dishes_arr.append(row)
             elif ozon_category in things_storage_categories:
                 counter += 1
                 row = get_things_storage_row(input_row, ozon_category)
-                write_row("output/things_storage_output.xlsx", row)
+                things_storage_arr.append(row)
             elif ozon_category in paper_categories:
                 counter += 1
                 row = get_paper_row(input_row, ozon_category)
-                write_row("output/paper_output.xlsx", row)
+                paper_arr.append(row)
             elif ozon_category in demonstration_boards_categories:
                 counter += 1
                 row = get_demonstration_boards_row(input_row, ozon_category)
-                write_row("output/demonstration_boards_output.xlsx", row)
+                demonstration_boards_arr.append(row)
             elif ozon_category in child_bags_categories:
                 counter += 1
                 row = get_child_bags_row(input_row, ozon_category)
-                write_row("output/child_bags_output.xlsx", row)
+                child_bags_arr.append(row)
             elif ozon_category == "Клей канцелярский":
                 counter += 1
                 row = get_glue_row(input_row, ozon_category)
-                write_row("output/glue_output.xlsx", row)
+                glue_arr.append(row)
             elif ozon_category in folders_files_categories:
                 counter += 1
                 row = get_folders_files_row(input_row, ozon_category)
-                write_row("output/folders_files_output.xlsx", row)
+                folders_files_arr.append(row)
             elif ozon_category == "Пенал без наполнения":
                 counter += 1
                 row = get_pencil_box_row(input_row, ozon_category)
-                write_row("output/pencil_box_output.xlsx", row)
+                pencil_box_arr.append(row)
             elif ozon_category in seal_and_stamp_categories:
                 counter += 1
                 row = get_seal_and_stamp_row(input_row, ozon_category)
-                write_row("output/seal_and_stamp_output.xlsx", row)
+                seal_and_stamp_arr.append(row)
             elif ozon_category in writing_materials_categories:
                 counter += 1
                 row = get_writing_materials_row(input_row, ozon_category)
-                write_row("output/writing_materials_output.xlsx", row)
+                writing_materials_arr.append(row)
             elif ozon_category in personal_hygiene_categories:
                 counter += 1
                 row = get_personal_hygiene_row(input_row, ozon_category)
-                write_row("output/personal_hygiene_output.xlsx", row)
+                personal_hygiene_arr.append(row)
             elif ozon_category == "Одежда медицинская одноразовая":
                 counter += 1
                 row = get_clothes_row(input_row, ozon_category)
-                write_row("output/clothes_output.xlsx", row)
+                clothes_arr.append(row)
             elif ozon_category in juse_drinks_categories:
                 counter += 1
                 row = get_juse_drinks_row(input_row, ozon_category)
-                write_row("output/juse_drinks_output.xlsx", row)
+                juse_drinks_arr.append(row)
             elif ozon_category in bread_categories:
                 counter += 1
                 row = get_bread_row(input_row, ozon_category)
-                write_row("output/bread_output.xlsx", row)
+                bread_arr.append(row)
             elif ozon_category == "Лампочка":
                 counter += 1
                 row = get_lamp_row(input_row, ozon_category)
-                write_row("output/lamp_output.xlsx", row)
+                lamp_arr.append(row)
             elif ozon_category == "Светильник настольный":
                 counter += 1
                 row = get_big_lamp_row(input_row, ozon_category)
-                write_row("output/big_lamp_output.xlsx", row)
+                big_lamp_arr.append(row)
             elif ozon_category in fire_fighting_categories:
                 counter += 1
                 row = get_fire_fighting_row(input_row, ozon_category)
-                write_row("output/fire_fighting_output.xlsx", row)
+                fire_fighting_arr.append(row)
             elif ozon_category in children_creativity_categories:
                 counter += 1
                 row = get_children_creativity_row(input_row, ozon_category)
-                write_row("output/children_creativity_output.xlsx", row)
+                children_creativity_arr.append(row)
             elif ozon_category in set_for_creativity_categories:
                 counter += 1
                 row = get_set_for_creativity_row(input_row, ozon_category)
-                write_row("output/set_for_creativity_output.xlsx", row)
+                set_for_creativity_arr.append(row)
             elif ozon_category == "Рюкзак для ноутбука":
                 counter += 1
-                row = get_computer_bag_row(input_row, ozon_category)
-                write_row("output/computer_bag_output.xlsx", row)
+                continue
+                #row = get_computer_bag_row(input_row, ozon_category)
+
             elif ozon_category in office_equipment_categories:
                 counter += 1
                 row = get_office_equipment_row(input_row, ozon_category)
-                write_row("output/office_equipment_output.xlsx", row)
+                computer_bag_arr.append(row)
             else:
                 f = open("not_handler.txt", 'a', encoding='utf-8')
                 f.write(input_row[0] + '\n')
@@ -968,6 +1030,37 @@ def main():
             f.write('\n\nstart_bag\n' + 'id:' + input_row[0] + '\n')
             f.write(e.__str__() + '\nendbag\n\n')
             f.close()
+    write_array("output/paper_products_output.xlsx", paper_arr)
+    write_array("output/paper_output.xlsx", paper_products_arr)
+    write_array("output/chancellery_output.xlsx", chancellery_categories_arr)
+    write_array("output/food_accessories_output.xlsx", food_accessories_arr)
+    write_array("output/medical_devices_output.xlsx", medical_devices_arr)
+    write_array("output/inventory_for_home_output.xlsx", inventory_for_home_arr)
+    write_array("output/inventory_for_cleaning_output.xlsx", inventory_for_cleaning_arr)
+    write_array("output/medical_supplies_output.xlsx", medical_supplies_arr)
+    write_array("output/cleaning_products_output.xlsx", cleaning_products_arr)
+    write_array("output/air_freshener_output.xlsx", air_freshener_arr)
+    write_array("output/bags_output.xlsx", bags_arr)
+    write_array("output/disposable_tableware_output.xlsx", disposable_tableware_arr)
+    write_array("output/dishes_output.xlsx", dishes_arr)
+    write_array("output/things_storage_output.xlsx", things_storage_arr)
+    write_array("output/demonstration_boards_output.xlsx", demonstration_boards_arr)
+    write_array("output/child_bags_output.xlsx", child_bags_arr)
+    write_array("output/glue_output.xlsx", glue_arr)
+    write_array("output/folders_files_output.xlsx", folders_files_arr)
+    write_array("output/pencil_box_output.xlsx", pencil_box_arr)
+    write_array("output/seal_and_stamp_output.xlsx", seal_and_stamp_arr)
+    write_array("output/writing_materials_output.xlsx", writing_materials_arr)
+    write_array("output/personal_hygiene_output.xlsx", personal_hygiene_arr)
+    write_array("output/clothes_output.xlsx", clothes_arr)
+    write_array("output/juse_drinks_output.xlsx", juse_drinks_arr)
+    write_array("output/bread_output.xlsx", bread_arr)
+    write_array("output/lamp_output.xlsx", lamp_arr)
+    write_array("output/fire_fighting_output.xlsx", fire_fighting_arr)
+    write_array("output/children_creativity_output.xlsx", children_creativity_arr)
+    write_array("output/set_for_creativity_output.xlsx", set_for_creativity_arr)
+    write_array("output/office_equipment_output.xlsx", computer_bag_arr)
+    write_array("output/big_lamp_output.xlsx", big_lamp_arr)
 
 
 def output_files_create():
